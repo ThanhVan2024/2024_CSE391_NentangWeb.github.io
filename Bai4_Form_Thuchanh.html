@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+   <section>
+    <h3>Basic Info</h3>
+        <form>
+            <table>
+                <tr>
+                    <td>
+                        <label>EmployeeID</label>
+                    </td>
+                    <td class="right">9</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Last Name</label>
+                    </td>
+                    <td class="right">Dodsworth</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>First Name</label>
+                    </td>
+                    <td>
+                        <input type="text" class="right">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="5">
+                        <label>Gender</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Male<input type="radio" class="right-radio"></td></tr>
+                <tr> <td>Female<input type="radio" class="right-radio"></td></tr>
+                <tr><td> XXX<input type="radio" class="right-radio"></td>
+                    
+                </tr>
+                <tr> 
+                    
+                    <td>ZZZ <input type="radio" class="right-radio"></td></tr>
+                
+                  
+                  
+                <tr>
+                    
+                    <td>
+                        <label>Title</label>
+                    </td>
+                    <td><input type="text" class="right"></td>
+                   
+                 
+                </tr>
+                <tr>
+                    <td>
+                        <label>Suffix</label>
+                    </td>
+                    <td> <input type="text" class="right"></td>
+                   
+                </tr>
+                <tr>
+                    <td>
+                        <label>BirthDate</label>
+                    </td>
+                    <td> <input type="text" class="right"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>HireDate</label>
+                    </td>
+                    <td> <input type="text" class="right"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>SSN # (if applicable)</label>
+                    </td>
+                </tr>
+                <tr>   
+                    <td>
+                        <label>Reports To</label>
+                    </td>
+                </tr>
+            </table>
+           
+           
+         
+          
+          
+       
+        
+        
+          
+        </form>
+   </section>
+   
+</body>
+<style>
+    body{
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
+    h3{
+        border-bottom: solid 3px;
+        border-color: gray;
+    }
+    section{
+        width: 800px;
+        height: 1000px;
+        margin: 0 auto;
+        padding: 10px;
+        background-color: white;
+        border: solid 10px;
+        border-color: lightgrey;
+    }
+    label{
+        margin-left: 20px;
+        width: 150px;
+        font-weight: bold;
+    }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding:10px;
+        }
+    input{
+        width: 99%;
+    }
+    .right{
+        width:580px;
+    }
+    .right-radio{
+        float: left;
+    }
+</style>
+</html>

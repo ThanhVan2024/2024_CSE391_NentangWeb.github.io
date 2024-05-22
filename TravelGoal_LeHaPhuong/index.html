@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Oleo+Script:wght@700&family=Quicksand:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Travel Goals</title>
+  </head>
+  <body>
+   
+    <header>
+  
+       
+          <div id="page-logo">
+            <a href="/index.html" style="font-size:xx-large;">Travel Goals</a>
+          </div>
+  
+          <nav>
+            <ul>
+              <li><a href="/places.html">Destinations</a></li>
+              <li><a href="">About</a></li>
+            </ul>
+          </nav>
+
+        
+      </div>
+    
+    
+    </header>
+    <main>
+      <section id="hero">
+        <div id="hero-content">
+          <h1><strong></strong>JOE'S TRAVEL PAGE</h1>
+          <p>LET'S EXPLORE THE WORLD TOGETHER!</p>
+          <a href="/places.html" style="text-align: center;"><strong>DISCOVER PLACES</strong></a>
+        </div>
+      </section>
+      <section id="highlights">
+        <h2>Highlights</h2>
+        <ul id="destinations">
+          <li class="destination">
+            <img
+              src="miami.jpg"
+              alt="Miami streets on sunny day"
+              style="width: 350px;height: 200px; margin-left: 10px;"
+            />
+            <p>Miami <strong>USA</strong></p>
+          </li>
+          <li class="destination">
+            <img
+              src="munich.jpg"
+              alt="Munich stadium in winter"
+              style="width: 350px;height: 200px;"
+            />
+            <p>Munich <strong>Germany</strong></p>
+          </li>
+          <li class="destination">
+            <img
+              src="barcelona.jpg"
+              alt="Palm beach in Barcelona"
+              style="width: 350px;height: 200px; margin-right:50px;"
+            />
+            <p>Barcelona <strong>Spain</strong></p>
+          </li>
+        </ul>
+      </section>
+    </main>
+    
+    <footer>
+      <ul>
+        <li>
+          <a href="https://www.instagram.com">
+            <img src="insta.png" alt="Instagram logo" style="width:50px;height: 50px;"
+          /></a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com">
+            <img src="facebook.png" alt="Facebook logo" style="width:50px;height: 50px;"
+          /></a>
+        </li>
+      </ul>
+    </footer>
+  </body>
+
+  <style>
+
+    body{
+
+        background-image: url("ocean.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 50%;
+        padding: 0px;
+        margin: 0px;
+        justify-content:flex-end;
+    }
+    #page-logo a {
+
+       color: yellow;
+       text-decoration: none;
+       font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    header{
+      display: flex;
+      justify-content: space-between;
+    }
+    header a{
+       color: yellow;
+       text-decoration: none;
+       font-family: Verdana, Geneva, Tahoma, sans-serif;
+       margin-right: 10px;
+     
+    }
+   
+    header ul{
+      list-style-type: none;
+      align-content: space-between;
+      display: flex;
+      
+    }
+    #hero-content{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content:space-between;
+      text-align: center;
+      margin: 0 auto;
+      padding: 30px;
+      width: 500px;
+      height: 150px;
+      background-color: rgb(0, 0, 0, 0.7);
+      border-radius: 5px;
+      box-shadow: 5px 5px 5px 0px;
+      font-family: Arial, Helvetica, sans-serif;
+
+    
+    }
+    #hero-content h1{
+      margin-bottom: 10px;
+      color:white;
+   
+    }
+    #hero-content p{
+      margin-bottom: 20px;
+      color:white;
+  
+    }
+    #hero-content a{
+
+      border-radius: 5px;
+      background-color: yellow;
+      padding: 10px;
+      text-decoration: none;
+      color: black;
+      box-shadow: 5px 5px 5px 0px;
+    }
+    #hero-content a:hover{
+      
+      background-color: rgb(138, 138, 22, 0.7);
+    }
+    #highlights{
+        background-color: rgb(177, 236, 243);
+        width:100%;
+        height: auto;
+        text-align: center;
+        justify-content: space-around;
+    }
+   
+    #destinations img{
+        border-radius: 5px;
+        box-shadow: 5px 5px 5px 0px;
+    }
+
+    #destinations{
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    #destinations li{
+     
+       list-style-type: none;
+      
+    }
+    footer{
+      justify-self:flex-end;
+
+      background-color: black;
+      width: 100%;
+      height: auto;
+      display: flex;
+      justify-content:space-evenly;
+     
+    }
+    footer ul {
+      list-style: none;
+      padding: 0;
+     
+    }
+
+    footer ul li {
+      margin-right: 20px;
+      display: inline; /* Để các phần tử nằm cạnh nhau */
+    }
+      
+  </style>
+
+
+</html>
+

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sinh viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">Quản lý sinh viên</h2>
+    <div class="mb-4">
+        <label for="lop" class="block text-gray-700 text-sm font-bold mb-2">Chọn lớp:</label>
+        <select id="lop" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </select>
+    </div>
+    <h3 class="text-xl font-bold mb-2">Danh sách sinh viên</h3>
+    <table id="bangSinhVien" class="table-auto w-full">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Họ tên</th>
+                <th class="px-4 py-2">Mã SV</th>
+                <th class="px-4 py-2">Ngày sinh</th>
+                <th class="px-4 py-2">Hành động</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="formSinhVienModal" class="hidden fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Thêm/Sửa sinh viên</h3>
+                <div class="mt-2">
+                    <form id="formSinhVien">
+                        <div>
+                            <label for="hoTen" class="block text-sm font-medium text-gray-700">Họ tên</label>
+                            <input type="text" id="hoTen" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div class="mt-4">
+                            <label for="maSV" class="block text-sm font-medium text-gray-700">Mã SV</label>
+                            <input type="text" id="maSV" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div class="mt-4">
+                            <label for="ngaySinh" class="block text-sm font-medium text-gray-700">Ngày sinh</label>
+                            <input type="date" id="ngaySinh" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-4 sm:mt-6">
+                    <button id="closeModal" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-sm">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            // Đọc dữ liệu từ data.json và hiển thị danh sách lớp vào dropdown
+            $.getJSON("data.json", function(data) {
+                $.each(data, function(index, item) {
+                    $('#lop').append($('<option>', { 
+                        value: index,
+                        text : item.tenLop 
+                    }));
+                });
+            });
+
+            // Xử lý sự kiện khi chọn lớp từ dropdown
+            $("#lop").change(function() {
+                var lopIndex = $(this).val();
+                if (lopIndex !== "") {
+                    hienThiDanhSachSinhVien(lopIndex);
+                }
+            });
+
+            // Hàm hiển thị danh sách sinh viên theo lớp
+            function hienThiDanhSachSinhVien(lopIndex) {
+                $.getJSON("data.json", function(data) {
+                    var danhSachSinhVien = data[lopIndex].sinhVien;
+                    var tableBody = $('#bangSinhVien tbody');
+                    tableBody.empty();
+                    $.each(danhSachSinhVien, function(index, sinhVien) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(sinhVien.hoTen));
+                        row.append($('<td>').text(sinhVien.maSV));
+                        row.append($('<td>').text(sinhVien.ngaySinh));
+                        var actionCell = $('<td>');
+                        var editButton = $('<button>').text('Sửa').addClass('bg-yellow-500 text-white px-2 py-1 rounded edit').click(function() {
+                            suaSinhVien(lopIndex, index);
+                        });
+                        var deleteButton = $('<button>').text('Xóa').addClass('bg-red-500 text-white px-2 py-1 rounded delete').click(function() {
+                            if (confirm('Bạn có chắc chắn muốn xóa sinh viên này?')) {
+                                xoaSinhVien(lopIndex, index);
+                            }
+                        });
+                        actionCell.append(editButton).append(deleteButton);
+                        row.append(actionCell);
+                        tableBody.append(row);
+                    });
+                });
+            }
+
+            // Hàm thêm/sửa sinh viên
+            function suaSinhVien(lopIndex, svIndex) {
+                $.getJSON("data.json", function(data) {
+                    var sinhVien = data[lopIndex].sinhVien[svIndex];
+                    $('#hoTen').val(sinhVien.hoTen);
+                    $('#maSV').val(sinhVien.maSV);
+                    $('#ngaySinh').val(sinhVien.ngaySinh);
+
+                    $('#formSinhVienModal').removeClass('hidden');
+
+                    $('#formSinhVien').off('submit').on('submit', function(event) {
+                        event.preventDefault();
+                        sinhVien.hoTen = $('#hoTen').val();
+                        sinhVien.maSV = $('#maSV').val();
+                        sinhVien.ngaySinh = $('#ngaySinh').val();
+                        data[lopIndex].sinhVien[svIndex] = sinhVien;
+                        luuDuLieu(data);
+                        $('#formSinhVienModal').addClass('hidden');
+                        hienThiDanhSachSinhVien(lopIndex);
+                    });
+                });
+            }
+
+            // Hàm xóa sinh viên
+            function xoaSinhVien(lopIndex, svIndex) {
+                $.getJSON("data.json", function(data) {
+                    data[lopIndex].sinhVien.splice(svIndex, 1);
+                    luuDuLieu(data);
+                    hienThiDanhSachSinhVien(lopIndex);
+                });
+            }
+
+            // Hàm lưu dữ liệu vào JSON file thông qua AJAX
+            function luuDuLieu(data) {
+                $.ajax({
+                    url: 'save_data.php',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        alert('Dữ liệu đã được cập nhật!');
+                    }
+                });
+            }
+
+            //

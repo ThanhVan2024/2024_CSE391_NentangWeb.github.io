@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+        content="width=device-width, user-scalable=no, initialscale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Ứng dụng quản lý sinh viên</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="container mx-auto p-4">
+        <h2 class="text-2xl font-bold mb-4">Thêm sinh viên</h2>
+        <form id="formSinhVien" class="mb-8">
+            <div class="mb-4">
+                <label for="hoTen" class="block text-gray-700 text-sm font-bold 
+                mb-2">Họ tên:</label>
+                <input type="text" id="hoTen" class="shadow appearance-none 
+                border rounded w-full py-2 px-3 text-gray-700 leading-tight 
+                focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="maSV" class="block text-gray-700 text-sm font-bold 
+                mb-2">Mã SV:</label>
+                <input type="text" id="maSV" class="shadow appearance-none 
+                border rounded w-full py-2 px-3 text-gray-700 leading-tight 
+                focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="ngaySinh" class="block text-gray-700 text-sm fontbold mb-2">Ngày sinh:</label>
+                <input type="date" id="ngaySinh" class="shadow appearance-none 
+                border rounded w-full py-2 px-3 text-gray-700 leading-tight 
+                focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-4">
+                <label for="lop" class="block text-gray-700 text-sm font-bold 
+                mb-2">Lớp:</label>
+                <input type="text" id="lop" class="shadow appearance-none 
+                border rounded w-full py-2 px-3 text-gray-700 leading-tight 
+                focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 
+                text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadowoutline">
+                Thêm
+                </button>
+            </div>
+        </form>
+        <h2 class="text-2xl font-bold mb-4">Danh sách sinh viên</h2>
+        <table id="bangSinhVien" class="table-auto w-full">
+        <thead>
+        <tr>
+            <th class="px-4 py-2">Họ tên</th>
+            <th class="px-4 py-2">Mã SV</th>
+            <th class="px-4 py-2">Ngày sinh</th>
+            <th class="px-4 py-2">Lớp</th>
+            <th class="px-4 py-2">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+        <script>
+                document.getElementById("formSinhVien").addEventListener("submit", function(event) {
+                event.preventDefault(); 
+
+                // Lấy dữ liệu từ form
+                let hoTen = document.getElementById("hoTen").value;
+                let maSV = document.getElementById("maSV").value;
+                let ngaySinh = document.getElementById("ngaySinh").value;
+                let lop = document.getElementById("lop").value;
+
+                // Validate dữ liệu
+                if (hoTen === "" || maSV === "" || ngaySinh === "" || lop === "") {
+                    alert("Vui lòng điền đầy đủ thông tin sinh viên.");
+                    return;
+                }
+
+                // Thêm sinh viên vào bảng và localStorage
+                let sinhVien = {
+                    hoTen: hoTen,
+                    maSV: maSV,
+                    ngaySinh: ngaySinh,
+                    lop: lop
+                };
+
+                themSinhVienVaoBang(sinhVien);
+                themSinhVienVaoLocalStorage(sinhVien);
+
+                // Reset form
+                document.getElementById("formSinhVien").reset();
+            });
+
+            function themSinhVienVaoBang(sinhVien) {
+                let table = document.getElementById("bangSinhVien").getElementsByTagName('tbody')[0];
+                let newRow = table.insertRow();
+
+                let cellHoTen = newRow.insertCell(0);
+                let cellMaSV = newRow.insertCell(1);
+                let cellNgaySinh = newRow.insertCell(2);
+                let cellLop = newRow.insertCell(3);
+                let cellActions = newRow.insertCell(4);
+
+                cellHoTen.innerHTML = sinhVien.hoTen;
+                cellMaSV.innerHTML = sinhVien.maSV;
+                cellNgaySinh.innerHTML = sinhVien.ngaySinh;
+                cellLop.innerHTML = sinhVien.lop;
+                cellActions.innerHTML = '<button onclick="suaSinhVien()">Sửa</button> <button onclick="xoaSinhVien()">Xóa</button>';
+            }
+
+            function themSinhVienVaoLocalStorage(sinhVien) {
+                let danhSachSinhVien = JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+                danhSachSinhVien.push(sinhVien);
+                localStorage.setItem("danhSachSinhVien", JSON.stringify(danhSachSinhVien));
+            }
+
+            function hienThiDanhSachSinhVien() {
+                let danhSachSinhVien = JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+                danhSachSinhVien.forEach(function(sinhVien) {
+                    themSinhVienVaoBang(sinhVien);
+                });
+            }
+            function capNhatSinhVien(tr) {
+                // Lấy thông tin từ form
+                let hoTen = document.getElementById("hoTen").value;
+                let maSV = document.getElementById("maSV").value;
+                let ngaySinh = document.getElementById("ngaySinh").value;
+                let lop = document.getElementById("lop").value;
+
+                // Validate dữ liệu
+                if (hoTen === "" || maSV === "" || ngaySinh === "" || lop === "") {
+                    alert("Vui lòng điền đầy đủ thông tin sinh viên.");
+                    return;
+                }
+
+                // Cập nhật thông tin vào dòng của bảng
+                let cells = tr.getElementsByTagName('td');
+                cells[0].innerText = hoTen;
+                cells[1].innerText = maSV;
+                cells[2].innerText = ngaySinh;
+                cells[3].innerText = lop;
+
+                // Cập nhật lại dữ liệu trong localStorage
+                capNhatLocalStorage();
+
+                // Reset form
+                document.getElementById("formSinhVien").reset();
+
+                // Chuyển nút "Cập nhật" về nút "Thêm"
+                let submitButton = document.querySelector('button[type="submit"]');
+                submitButton.innerText = "Thêm";
+                submitButton.removeEventListener('click', capNhatSinhVien);
+                submitButton.addEventListener('click', function(event) {
+                event.preventDefault(); 
+                    
+                   
+                });
+            }
+            function capNhatLocalStorage() {
+                let tableRows = document.getElementById("bangSinhVien").getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                let danhSachSinhVien = [];
+
+                for (let i = 0; i < tableRows.length; i++) {
+                    let cells = tableRows[i].getElementsByTagName('td');
+                    let sinhVien = {
+                        hoTen: cells[0].innerText,
+                        maSV: cells[1].innerText,
+                        ngaySinh: cells[2].innerText,
+                        lop: cells[3].innerText
+                    };
+                    danhSachSinhVien.push(sinhVien);
+                }
+
+                localStorage.setItem("danhSachSinhVien", JSON.stringify(danhSachSinhVien));
+            }
+
+            function suaSinhVien() {
+                
+                    let tr = event.target.closest('tr'); 
+                    let cells = tr.getElementsByTagName('td');
+                 
+                    let hoTen = cells[0].innerText;
+                    let maSV = cells[1].innerText;
+                    let ngaySinh = cells[2].innerText;
+                    let lop = cells[3].innerText;
+
+                    document.getElementById("hoTen").value = hoTen;
+                    document.getElementById("maSV").value = maSV;
+                    document.getElementById("ngaySinh").value = ngaySinh;
+                    document.getElementById("lop").value = lop;
+
+                    
+                    let submitButton = document.querySelector('button[type="submit"]');
+                    submitButton.innerText = "Cập nhật";
+                    submitButton.removeEventListener('click', capNhatSinhVien); 
+                    submitButton.addEventListener('click', function(event) {
+                    event.preventDefault(); 
+                     
+                    capNhatSinhVien(tr);
+                    });
+            }
+            function xoaSinhVien() {
+               
+              
+                if (confirm("Bạn có chắc chắn muốn xóa sinh viên này không?")) {
+                    let tr = event.target.closest('tr'); 
+                    tr.remove();
+
+                    capNhatLocalStorage();
+                }
+            }
+            hienThiDanhSachSinhVien();
+        </script>
+    </body>
+</html>

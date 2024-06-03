@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quản lý sinh viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body class="container mx-auto p-4">
+<h2 class="text-2xl font-bold mb-4">Quản lý sinh viên</h2>
+<div class="mb-4">
+    <label for="lop" class="block text-gray-700 text-sm font-bold 
+    mb-2">Chọn lớp:</label>
+    <select id="lop" class="shadow appearance-none border rounded 
+    w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none 
+    focus:shadow-outline">
+    </select>
+</div>
+<h3 class="text-xl font-bold mb-2">Danh sách sinh viên</h3>
+
+<table id="bangSinhVien" class="table-auto w-full">
+    <thead>
+    <tr>
+    <th class="px-4 py-2">Họ tên</th>
+    <th class="px-4 py-2">Mã SV</th>
+    <th class="px-4 py-2">Ngày sinh</th>
+    <th class="px-4 py-2">Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+   </table>
+   
+<div id="formSinhVienModal" class="hidden fixed z-10 inset-0 
+overflow-y-auto" aria-labelledby="modal-title" role="dialog" 
+aria-modal="true">
+</div>
+<script>
+    $(document).ready(function() {
+        // Đọc dữ liệu từ tệp JSON 
+        $.getJSON("data.json", function(data) {
+            var classes = data; 
+            // Duyệt qua mỗi lớp và thêm chúng vào menu dropdown
+            classes.forEach(function(cls) {
+                $('#lop').append($('<option>', {
+                    value: cls.tenLop,
+                    text: cls.tenLop
+                }));
+            });
+
+            // Hiển thị danh sách sinh viên của lớp đầu tiên khi trang được tải
+            hienThiDanhSachSinhVien(classes[0].tenLop);
+
+            $("#lop").change(function() {
+                var selectedClass = $(this).val(); // Lấy lớp được chọn
+                hienThiDanhSachSinhVien(selectedClass);
+            });
+
+            // Hàm hiển thị danh sách sinh viên của lớp được chọn
+            function hienThiDanhSachSinhVien(selectedClass) {
+                // Xóa bỏ danh sách sinh viên hiện tại (nếu có)
+                $('#bangSinhVien tbody').empty();
+
+                // Tìm lớp được chọn từ dữ liệu đã đọc
+                var selectedClassData = classes.find(function(cls) {
+                    return cls.tenLop === selectedClass;
+                });
+
+                // Kiểm tra nếu lớp được chọn tồn tại
+                if (selectedClassData) {
+                    // Duyệt qua mỗi sinh viên trong lớp và hiển thị thông tin
+                    selectedClassData.sinhVien.forEach(function(sinhVien) {
+                        // Hiển thị sinh viên trong bảng
+                        var row = $("<tr>");
+                        row.append($("<td>").text(sinhVien.hoTen));
+                        row.append($("<td>").text(sinhVien.maSV));
+                        row.append($("<td>").text(sinhVien.ngaySinh));
+                    
+                        row.append($("<td>").html(`<button class="edit">Sửa</button><button class="delete">Xóa</button>`));
+
+                        $("#bangSinhVien tbody").append(row);
+                    });
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

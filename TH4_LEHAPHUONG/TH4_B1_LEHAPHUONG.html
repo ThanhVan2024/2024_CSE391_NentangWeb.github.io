@@ -10,6 +10,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="jquery.validate.min.js"></script>
         <script src="validate.js"></script>
+        <script src="data.json"></script>
         <style>   label.error{
             color:red;
         }</style>
@@ -66,6 +67,7 @@
         </tbody>
         </table>
         <script>
+            
                 document.getElementById("formSinhVien").addEventListener("submit", function(event) {
                 event.preventDefault(); 
 
@@ -87,12 +89,12 @@
 
                 themSinhVienVaoBang(sinhVien);
                 themSinhVienVaoLocalStorage(sinhVien);
-
+      
                 // Reset form
                 document.getElementById("formSinhVien").reset();
                 }
-            
-               
+                
+              
              
             });
 
@@ -133,7 +135,6 @@
                 let lop = document.getElementById("lop").value;
 
                 // Validate dữ liệu
-        
 
                 // Cập nhật thông tin vào dòng của bảng
                 let cells = tr.getElementsByTagName('td');
@@ -142,8 +143,8 @@
                 cells[2].innerText = ngaySinh;
                 cells[3].innerText = lop;
 
-                // Cập nhật lại dữ liệu trong localStorage
-                capNhatLocalStorage();
+                // Cập nhật lại dữ liệu chỉ của sinh viên đã thay đổi trong localStorage
+                capNhatSinhVienTrongLocalStorage(tr);
 
                 // Reset form
                 document.getElementById("formSinhVien").reset();
@@ -153,23 +154,38 @@
                 submitButton.innerText = "Thêm";
                 submitButton.removeEventListener('click', capNhatSinhVien);
                 submitButton.addEventListener('click', function(event) {
-                event.preventDefault();             
+                    event.preventDefault();
                 });
             }
-            function capNhatLocalStorage() {
-                let tableRows = document.getElementById("bangSinhVien").getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-                let danhSachSinhVien = [];
 
-                for (let i = 0; i < tableRows.length; i++) {
-                    let cells = tableRows[i].getElementsByTagName('td');
-                    let sinhVien = {
-                        hoTen: cells[0].innerText,
-                        maSV: cells[1].innerText,
-                        ngaySinh: cells[2].innerText,
-                        lop: cells[3].innerText
-                    };
-                    danhSachSinhVien.push(sinhVien);
-                }
+            function capNhatSinhVienTrongLocalStorage(tr) {
+                let danhSachSinhVien = JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+                let maSVCanCapNhat = tr.cells[1].innerText;
+
+                danhSachSinhVien.forEach(function(sinhVien) {
+                    if (sinhVien.maSV === maSVCanCapNhat) {
+                        // Cập nhật thông tin của sinh viên chỉ định
+                        sinhVien.hoTen = tr.cells[0].innerText;
+                        sinhVien.ngaySinh = tr.cells[2].innerText;
+                        sinhVien.lop = tr.cells[3].innerText;
+                    }
+                });
+
+                localStorage.setItem("danhSachSinhVien", JSON.stringify(danhSachSinhVien));
+            }
+
+            function capNhatLocalStorage() {
+                let danhSachSinhVien = JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+                let maSVCanCapNhat = tr.cells[1].innerText;
+
+                danhSachSinhVien.forEach(function(sinhVien) {
+                    if (sinhVien.maSV === maSVCanCapNhat) {
+                        // Cập nhật thông tin của sinh viên chỉ định
+                        sinhVien.hoTen = tr.cells[0].innerText;
+                        sinhVien.ngaySinh = tr.cells[2].innerText;
+                        sinhVien.lop = tr.cells[3].innerText;
+                    }
+                });
 
                 localStorage.setItem("danhSachSinhVien", JSON.stringify(danhSachSinhVien));
             }
@@ -201,12 +217,22 @@
             }
             function xoaSinhVien() {
                
-              
-                if (confirm("Bạn có chắc chắn muốn xóa sinh viên này không?")) {
-                    let tr = event.target.closest('tr'); 
+                        
+                            if (confirm("Bạn có chắc chắn muốn xóa sinh viên này không?")) {
+                    let tr = event.target.closest('tr'); // Tìm dòng chứa nút xóa được nhấn
+                    let maSVCanXoa = tr.cells[1].innerText; // Lấy mã sinh viên cần xóa
+
+                    // Xóa dòng sinh viên khỏi bảng
                     tr.remove();
 
-                    capNhatLocalStorage();
+                    // Lọc ra danh sách sinh viên mới không chứa sinh viên có mã tương ứng
+                    let danhSachSinhVien = JSON.parse(localStorage.getItem("danhSachSinhVien")) || [];
+                    danhSachSinhVien = danhSachSinhVien.filter(function(sinhVien) {
+                        return sinhVien.maSV !== maSVCanXoa;
+                    });
+
+                    // Cập nhật lại danh sách sinh viên mới vào local storage
+                    localStorage.setItem("danhSachSinhVien", JSON.stringify(danhSachSinhVien));
                 }
             }
             hienThiDanhSachSinhVien();
